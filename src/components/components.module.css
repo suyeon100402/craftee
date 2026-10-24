@@ -411,3 +411,54 @@
     transform: scale(0.94);
   }
 }
+
+/* ---------- DateField ---------- */
+.dateHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.unknownToggle {
+  padding: 2px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.unknownToggle[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+/* 아이폰·아이패드 Safari는 날짜 칸에 고유 최소 너비가 있어서 화면 밖으로 밀려난다. 기본 모양을 꺼서 막는다. */
+.dateInput {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  min-width: 0;
+  text-align: left;
+}
+.dateInput::-webkit-date-and-time-value {
+  margin: 0;
+  text-align: left;
+}
+.dateUnknown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  text-align: left;
+  border-style: dashed;
+}
+.dateUnknown span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-weight: 700;
+}

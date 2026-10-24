@@ -171,6 +171,13 @@ p {
   outline: none;
   border-color: var(--primary-strong);
 }
+/* 아이폰·아이패드 Safari의 날짜 칸이 화면 밖으로 밀려나지 않게 기본 모양을 끈다. */
+input[type='date'].input {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  min-width: 0;
+}
 .textarea {
   min-height: 120px;
   resize: vertical;

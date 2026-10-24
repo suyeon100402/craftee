@@ -12,6 +12,7 @@ import { PhotoPicker, usePhotoDraft } from '../../components/PhotoPicker';
 import { PhotoImg } from '../../components/PhotoImg';
 import { TagInput } from '../../components/TagInput';
 import { CategoryEditor } from '../../components/CategoryEditor';
+import { DateField } from '../../components/DateField';
 import { NotFoundPage } from '../../app/NotFoundPage';
 import s from './projects.module.css';
 
@@ -61,13 +62,13 @@ function ProjectForm({ initial, isNew }: { initial: Project; isNew: boolean }) {
 
   const set = <K extends keyof Project>(key: K, value: Project[K]) => setForm((f) => ({ ...f, [key]: value }));
 
-  // 상태를 바꾸면 비어 있는 날짜를 오늘로 채워준다.
+  // 계획 → 시작하거나 완성으로 바꾸는 순간에만 빈 날짜를 오늘로 채운다('모름'으로 둔 날짜는 건드리지 않음).
   const changeStatus = (status: ProjectStatus) =>
     setForm((f) => ({
       ...f,
       status,
-      startedAt: status !== 'planned' && !f.startedAt ? todayStr() : f.startedAt,
-      finishedAt: status === 'done' && !f.finishedAt ? todayStr() : f.finishedAt,
+      startedAt: f.status === 'planned' && status !== 'planned' && !f.startedAt ? todayStr() : f.startedAt,
+      finishedAt: f.status !== 'done' && status === 'done' && !f.finishedAt ? todayStr() : f.finishedAt,
     }));
 
   const addLink = () => {
@@ -158,25 +159,9 @@ function ProjectForm({ initial, isNew }: { initial: Project; isNew: boolean }) {
           </div>
           {!isPlan && (
             <div className={s.twoCol}>
-              <label className="field">
-                <span className="label">시작한 날</span>
-                <input
-                  type="date"
-                  className="input"
-                  value={form.startedAt ?? ''}
-                  onChange={(e) => set('startedAt', e.target.value || null)}
-                />
-              </label>
+              <DateField label="시작한 날" value={form.startedAt} onChange={(v) => set('startedAt', v)} />
               {form.status === 'done' && (
-                <label className="field">
-                  <span className="label">완성한 날</span>
-                  <input
-                    type="date"
-                    className="input"
-                    value={form.finishedAt ?? ''}
-                    onChange={(e) => set('finishedAt', e.target.value || null)}
-                  />
-                </label>
+                <DateField label="완성한 날" value={form.finishedAt} onChange={(v) => set('finishedAt', v)} />
               )}
             </div>
           )}

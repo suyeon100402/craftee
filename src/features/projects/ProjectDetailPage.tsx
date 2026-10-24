@@ -32,10 +32,10 @@ export function ProjectDetailPage() {
 
   const changeStatus = (status: ProjectStatus) => {
     if (status === project.status) return;
-    // 상태를 바꾸면 비어 있는 날짜를 오늘로 채워준다.
+    // 계획 → 시작하거나 완성으로 바꾸는 순간에만 빈 날짜를 오늘로 채운다('모름'으로 둔 날짜는 건드리지 않음).
     const patch: Parameters<typeof projectsRepo.update>[1] = { status };
-    if (status !== 'planned' && !project.startedAt) patch.startedAt = todayStr();
-    if (status === 'done' && !project.finishedAt) patch.finishedAt = todayStr();
+    if (project.status === 'planned' && status !== 'planned' && !project.startedAt) patch.startedAt = todayStr();
+    if (project.status !== 'done' && status === 'done' && !project.finishedAt) patch.finishedAt = todayStr();
     void projectsRepo.update(project.id, patch);
   };
 
@@ -100,18 +100,14 @@ export function ProjectDetailPage() {
             ))}
           </div>
 
-          {(project.startedAt || project.finishedAt) && (
+          {project.status !== 'planned' && (
             <dl className={s.infoGrid}>
-              {project.startedAt && (
-                <>
-                  <dt>시작한 날</dt>
-                  <dd>{formatDate(project.startedAt)}</dd>
-                </>
-              )}
-              {project.finishedAt && (
+              <dt>시작한 날</dt>
+              <dd className={project.startedAt ? undefined : 'muted'}>{formatDate(project.startedAt) || '모름'}</dd>
+              {project.status === 'done' && (
                 <>
                   <dt>완성한 날</dt>
-                  <dd>{formatDate(project.finishedAt)}</dd>
+                  <dd className={project.finishedAt ? undefined : 'muted'}>{formatDate(project.finishedAt) || '모름'}</dd>
                 </>
               )}
             </dl>
