@@ -1,0 +1,49 @@
+[data-theme='cream'] {
+  color-scheme: light;
+  --theme-color: #f7f1e6;
+
+  --bg: #f7f1e6;
+  --bg-deco: #efe5d4;
+  --surface: #fffdf8;
+  --surface-2: #faf5ec;
+  --text: #4b4237;
+  --text-muted: #8a7e6f;
+  --border: #ebe1cf;
+
+  --primary: #e8cba3;
+  --primary-strong: #dfbb8b;
+  --primary-soft: #f6ead8;
+  --on-primary: #4b3720;
+  --focus: #c9a37a;
+
+  --danger: #c2553f;
+  --danger-soft: #f8e4dd;
+
+  --shadow-sm: 0 1px 2px rgba(110, 90, 60, 0.06), 0 2px 10px rgba(110, 90, 60, 0.06);
+  --shadow-md: 0 6px 24px rgba(110, 90, 60, 0.14);
+
+  /* 작품 종류 색 (종류마다 이 중 하나를 고른다) */
+  --cat-pink: #f4dccb;
+  --cat-pink-ink: #9a5a35;
+  --cat-peach: #f6dfc6;
+  --cat-peach-ink: #965820;
+  --cat-butter: #f2e5bf;
+  --cat-butter-ink: #806417;
+  --cat-lime: #e6e8c8;
+  --cat-lime-ink: #5f6527;
+  --cat-mint: #dce6d2;
+  --cat-mint-ink: #52693f;
+  --cat-sky: #dde4e4;
+  --cat-sky-ink: #4a6163;
+  --cat-lavender: #e9dfd2;
+  --cat-lavender-ink: #75604b;
+  --cat-gray: #e8e3da;
+  --cat-gray-ink: #6b6255;
+
+  --status-planned: #e4e3d9;
+  --status-planned-ink: #5f5d4b;
+  --status-in_progress: #f2e5bf;
+  --status-in_progress-ink: #806417;
+  --status-done: #dce6d2;
+  --status-done-ink: #52693f;
+}

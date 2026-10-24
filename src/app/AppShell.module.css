@@ -1,0 +1,116 @@
+.shell {
+  min-height: 100dvh;
+}
+
+.main {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--space-4) calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 96px);
+}
+
+/* ---------- 모바일 하단 탭바 ---------- */
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border);
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.tabIcon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  transition: background-color 0.2s;
+}
+.tab[aria-current='page'] {
+  color: var(--text);
+}
+.tab[aria-current='page'] .tabIcon {
+  background: var(--primary-soft);
+}
+
+/* ---------- PC 사이드바 ---------- */
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+  }
+  .tabbar {
+    display: none;
+  }
+  .main {
+    padding: 0 var(--space-6) var(--space-6);
+  }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100dvh;
+    padding: var(--space-5) var(--space-4);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 10px 20px;
+    font-family: var(--font-title);
+    font-size: 26px;
+  }
+  .brand img {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .navLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-weight: 600;
+    transition: background-color 0.15s;
+  }
+  .navLink:hover {
+    background: var(--surface-2);
+  }
+  .navLink[aria-current='page'] {
+    background: var(--primary-soft);
+    color: var(--text);
+  }
+  .sidebarFooter {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

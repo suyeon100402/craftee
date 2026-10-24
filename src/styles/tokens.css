@@ -1,0 +1,24 @@
+/* 테마와 관계없이 공통으로 쓰는 값. 색은 themes/*.css에 있다. */
+:root {
+  --font-body: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-title: 'Jua', var(--font-body);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --tabbar-h: 64px;
+  --sidebar-w: 236px;
+  --content-max: 1080px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

@@ -1,0 +1,324 @@
+/* ---------- 카드 ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.2s var(--ease),
+    box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.cover {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.cover img,
+.cover > div {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.coverPlaceholder {
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+}
+.coverStatus {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+.photoCount {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(40, 30, 35, 0.5);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px 12px;
+}
+.cardTitle {
+  font-weight: 700;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cardMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* ---------- 목록 ---------- */
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: var(--space-4);
+}
+
+/* ---------- 상세 ---------- */
+.detail {
+  display: grid;
+  gap: var(--space-5);
+}
+@media (min-width: 900px) {
+  .detail {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .detailWide {
+    grid-column: 1 / -1;
+  }
+}
+.detailTitle {
+  font-size: 28px;
+  margin: 6px 0 2px;
+}
+.statusSteps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 5px;
+  background: var(--surface-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+}
+.statusStep {
+  min-height: 38px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 14px;
+}
+.statusStep[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.infoGrid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  font-size: 14px;
+}
+.infoGrid dt {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.infoGrid dd {
+  margin: 0;
+}
+.description {
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+.linkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  font-size: 14px;
+  overflow: hidden;
+}
+.linkItem span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.noPhoto {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  font-size: 72px;
+}
+
+/* ---------- 진행 기록 ---------- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: var(--space-3);
+}
+.logItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 0 22px 26px;
+}
+.logItem::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--border);
+}
+.logItem:last-child::before {
+  display: none;
+}
+.logItem::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+.logHead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.logText {
+  white-space: pre-wrap;
+}
+.logPhotos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 6px;
+  max-width: 420px;
+}
+.logPhoto {
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+  cursor: zoom-in;
+}
+.logPhoto img,
+.logPhoto > div {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.logForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+/* ---------- 편집 ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 720px;
+}
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+.twoCol {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.twoCol input {
+  min-width: 0;
+}
+.formActions {
+  position: sticky;
+  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 12px);
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+@media (min-width: 900px) {
+  .formActions {
+    bottom: 16px;
+  }
+}
+.linkRow {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- 재료 고르기 ---------- */
+.materialOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-align: left;
+}
+.materialOption[aria-pressed='true'] {
+  border-color: var(--primary-strong);
+  background: var(--primary-soft);
+}
+.materialThumb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+  font-size: 20px;
+}
+.materialThumb img,
+.materialThumb > div {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.materialList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 2px;
+}

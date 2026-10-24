@@ -1,0 +1,51 @@
+/* 기본 테마: 파스텔. 새 테마는 이 파일을 복사해서 값만 바꾸면 된다. */
+:root,
+[data-theme='pastel'] {
+  color-scheme: light;
+  --theme-color: #fbf6f1;
+
+  --bg: #fbf6f1;
+  --bg-deco: #f5e9e2;
+  --surface: #ffffff;
+  --surface-2: #fdf6f2;
+  --text: #4a3f45;
+  --text-muted: #8e8189;
+  --border: #f0e3dc;
+
+  --primary: #f5afc2;
+  --primary-strong: #f09ab2;
+  --primary-soft: #fde6ec;
+  --on-primary: #5b2238;
+  --focus: #b9a2ef;
+
+  --danger: #d9566b;
+  --danger-soft: #fde8eb;
+
+  --shadow-sm: 0 1px 2px rgba(122, 88, 100, 0.06), 0 2px 10px rgba(122, 88, 100, 0.06);
+  --shadow-md: 0 6px 24px rgba(122, 88, 100, 0.14);
+
+  /* 작품 종류 색 (종류마다 이 중 하나를 고른다) */
+  --cat-pink: #fde1e8;
+  --cat-pink-ink: #b8506f;
+  --cat-peach: #ffe4d4;
+  --cat-peach-ink: #ad5a2e;
+  --cat-butter: #fff0c4;
+  --cat-butter-ink: #94690a;
+  --cat-lime: #eef5d0;
+  --cat-lime-ink: #5c7616;
+  --cat-mint: #dbf2e8;
+  --cat-mint-ink: #357d61;
+  --cat-sky: #e2effb;
+  --cat-sky-ink: #3f73a5;
+  --cat-lavender: #ebe3fb;
+  --cat-lavender-ink: #7051b8;
+  --cat-gray: #efeaea;
+  --cat-gray-ink: #6f6468;
+
+  --status-planned: #e2effb;
+  --status-planned-ink: #3f73a5;
+  --status-in_progress: #fff0c4;
+  --status-in_progress-ink: #94690a;
+  --status-done: #dbf2e8;
+  --status-done-ink: #357d61;
+}

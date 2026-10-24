@@ -1,0 +1,143 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 720px;
+}
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: var(--space-4) var(--space-4) var(--space-5);
+}
+.sectionDesc {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.theme {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-align: left;
+}
+.theme[aria-pressed='true'] {
+  border-color: var(--primary-strong);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.swatches {
+  display: flex;
+}
+.swatches span {
+  width: 26px;
+  height: 26px;
+  margin-right: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+.themeName {
+  font-weight: 700;
+}
+.themeDesc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.message {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+}
+.ok {
+  background: var(--status-done);
+  color: var(--status-done-ink);
+}
+.error {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.meter {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.meter span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: inherit;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.catList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.catRow {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 6px 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.catRow :global(.icon-btn) {
+  width: 36px;
+  height: 36px;
+}
+.catRow :global(.icon-btn:disabled) {
+  opacity: 0.3;
+  cursor: default;
+}
+.catEmoji {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  margin-right: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+}
+.catName {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.catKeep {
+  width: 36px;
+  flex: none;
+}
