@@ -78,6 +78,25 @@ export function MaterialDetailPage() {
             <h2 className={ps.detailTitle}>{material.name}</h2>
           </div>
 
+          <div className={ps.statusSteps} style={{ gridTemplateColumns: '1fr 1fr' }} role="group" aria-label="가지고 있는지">
+            <button
+              type="button"
+              className={ps.statusStep}
+              aria-pressed={!material.usedUp}
+              onClick={() => materialsRepo.setUsedUp(material.id, false)}
+            >
+              ✅ 가지고 있어요
+            </button>
+            <button
+              type="button"
+              className={ps.statusStep}
+              aria-pressed={!!material.usedUp}
+              onClick={() => materialsRepo.setUsedUp(material.id, true)}
+            >
+              🫙 다 썼어요
+            </button>
+          </div>
+
           {info.length > 0 && (
             <dl className={ps.infoGrid}>
               {info.map(([label, value]) => (

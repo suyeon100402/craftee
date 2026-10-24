@@ -42,6 +42,8 @@ export interface Material extends BaseRecord {
   brand: string;
   color: string;
   colorHex: string | null;
+  /** 다 써서 지금은 없는 재료. 예전 기록엔 없을 수 있어서 없으면 '가지고 있음'으로 본다. */
+  usedUp?: boolean;
   quantity: string;
   note: string;
   tags: string[];

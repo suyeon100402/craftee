@@ -104,6 +104,10 @@ export const materialsRepo = {
     return alive(await db.materials.get(id));
   },
 
+  async setUsedUp(id: string, usedUp: boolean) {
+    await db.materials.update(id, { usedUp, updatedAt: Date.now() });
+  },
+
   async save(material: Material, photos?: PhotoChanges) {
     await db.transaction('rw', db.materials, db.photos, async () => {
       await applyPhotoChanges(photos);

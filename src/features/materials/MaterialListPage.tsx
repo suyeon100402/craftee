@@ -14,13 +14,18 @@ export function MaterialListPage() {
   const materialTypes = useMaterialTypes();
   const [type, setType] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  // all: 전체, have: 가지고 있는 것, usedUp: 다 쓴 것
+  const [stock, setStock] = useState<'all' | 'have' | 'usedUp'>('all');
 
   const q = query.trim().toLowerCase();
   const visible = (materials ?? []).filter(
     (m) =>
       (!type || materialTypes.get(m.type).id === type) &&
+      (stock === 'all' || (stock === 'usedUp') === !!m.usedUp) &&
       (!q || [m.name, m.brand, m.color, m.note, ...m.tags].some((v) => v.toLowerCase().includes(q))),
   );
+  // 다 쓴 재료는 뒤로 보낸다.
+  visible.sort((a, b) => Number(!!a.usedUp) - Number(!!b.usedUp));
   // 가진 재료 종류만 필터 칩으로 보여준다.
   const usedTypes = materialTypes.list.filter((t) => materials?.some((m) => materialTypes.get(m.type).id === t.id));
 
@@ -47,6 +52,19 @@ export function MaterialListPage() {
               placeholder="이름, 브랜드, 색상으로 찾기"
             />
           </div>
+          {materials.some((m) => m.usedUp) && (
+            <div className="chips" role="group" aria-label="가지고 있는지">
+              <button className="chip" aria-pressed={stock === 'all'} onClick={() => setStock('all')}>
+                전체
+              </button>
+              <button className="chip" aria-pressed={stock === 'have'} onClick={() => setStock('have')}>
+                ✅ 가지고 있음
+              </button>
+              <button className="chip" aria-pressed={stock === 'usedUp'} onClick={() => setStock('usedUp')}>
+                🫙 다 씀
+              </button>
+            </div>
+          )}
           {usedTypes.length > 1 && (
             <div className="chips" role="group" aria-label="재료 종류">
               <button className="chip" aria-pressed={!type} onClick={() => setType(null)}>

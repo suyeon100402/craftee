@@ -140,3 +140,25 @@
   place-items: center;
   height: 1.5em;
 }
+
+/* 다 쓴 재료: 흐리게 + 표시 */
+.usedUp {
+  position: relative;
+}
+.usedUp .thumb {
+  filter: grayscale(0.7) opacity(0.55);
+}
+.usedUp .name {
+  color: var(--text-muted);
+}
+.usedUpBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--surface);
+  font-size: 12px;
+  font-weight: 700;
+}
