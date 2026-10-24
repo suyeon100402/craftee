@@ -163,3 +163,28 @@
   border-radius: 14px;
   font-size: 24px;
 }
+
+.randomCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin: -8px 0 24px;
+}
+.randomCard strong {
+  display: block;
+}
+.randomCard small {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.randomDice {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--cat-lavender);
+  font-size: 24px;
+}

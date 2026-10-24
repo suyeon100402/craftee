@@ -84,6 +84,15 @@ export function HomePage() {
             ))}
           </div>
 
+          <Link to="/random" className={`card ${s.randomCard}`}>
+            <span className={s.randomDice}>🎲</span>
+            <span style={{ flex: 1 }}>
+              <strong>오늘 뭐 만들지?</strong>
+              <small>다음 작품이나 재료를 랜덤으로 뽑아 봐요</small>
+            </span>
+            <ChevronRight size={18} className="muted" />
+          </Link>
+
           {needsBackup && (
             <Link to="/settings" className={s.reminder}>
               <CloudDownload size={22} style={{ flex: 'none' }} />

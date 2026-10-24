@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { Plus, Search } from 'lucide-react';
+import { Dices, Plus, Search } from 'lucide-react';
 import type { ProjectStatus } from '../../data/types';
 import { STATUSES } from '../../data/meta';
 import { useCategories } from '../../data/categories';
@@ -46,6 +46,9 @@ export function ProjectListPage({ mode }: { mode: 'works' | 'plans' }) {
         title={isPlans ? '만들 예정' : '작품'}
         actions={
           <>
+            <Link to={`/random?mode=${isPlans ? 'next' : 'today'}`} className="icon-btn" aria-label="랜덤 뽑기">
+              <Dices size={22} />
+            </Link>
             <Link to="/search" className="icon-btn" aria-label="검색">
               <Search size={22} />
             </Link>

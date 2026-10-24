@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, ScrollRestoration } from 'react-router';
-import { House, Images, Lightbulb, Package, Plus, Search, Settings } from 'lucide-react';
+import { Dices, House, Images, Lightbulb, Package, Plus, Search, Settings } from 'lucide-react';
 import s from './AppShell.module.css';
 
 const NAV = [
@@ -24,6 +24,10 @@ export function AppShell() {
             {label}
           </NavLink>
         ))}
+        <NavLink to="/random" className={s.navLink}>
+          <Dices size={20} />
+          랜덤 뽑기
+        </NavLink>
         <NavLink to="/search" className={s.navLink}>
           <Search size={20} />
           검색
