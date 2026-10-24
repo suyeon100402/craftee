@@ -10,6 +10,7 @@ import { CategoryEditor } from '../../components/CategoryEditor';
 import { useConfirm } from '../../components/ConfirmDialog';
 import { compactToday, formatTimestamp } from '../../lib/date';
 import { PageHeader } from '../../components/PageHeader';
+import { CloudSection } from './CloudSection';
 import s from './settings.module.css';
 
 export function SettingsPage() {
@@ -21,6 +22,7 @@ export function SettingsPage() {
         <CategorySection kind="project" />
         <CategorySection kind="material" />
         <TrashLink />
+        <CloudSection />
         <BackupSection />
         <StorageSection />
         <InstallSection />

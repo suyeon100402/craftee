@@ -11,6 +11,8 @@ export const db = new Dexie('craftee') as Dexie & {
   settings: EntityTable<Setting, 'key'>;
   categories: EntityTable<Category, 'id'>;
   materialTypes: EntityTable<Category, 'id'>;
+  /** 클라우드에 이미 올린(또는 클라우드에서 받은) 사진 id */
+  syncedPhotos: EntityTable<{ id: string }, 'id'>;
 };
 
 db.version(1).stores({
@@ -30,6 +32,9 @@ db.version(2)
 db.version(3)
   .stores({ materialTypes: 'id, order' })
   .upgrade((tx) => seed(tx, 'materialTypes', DEFAULT_MATERIAL_TYPES));
+
+// v4: 클라우드 동기화 — 어떤 사진을 이미 올렸는지 기억한다.
+db.version(4).stores({ syncedPhotos: 'id' });
 
 // 처음 설치할 때(업그레이드가 아니라 새로 만들 때)
 db.on('populate', async (tx) => {

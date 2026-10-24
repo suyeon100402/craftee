@@ -151,3 +151,20 @@
 .linkCard h2 {
   flex: 1;
 }
+
+.cloudForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cloudForm :global(.input) {
+  flex: 1 1 200px;
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

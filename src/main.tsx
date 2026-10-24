@@ -7,11 +7,13 @@ import { CategoriesProvider } from './data/categories';
 import { DialogProvider } from './components/ConfirmDialog';
 import { applyTheme, getStoredTheme } from './theme/themes';
 import { trashRepo } from './data/repo';
+import { initSync } from './data/cloud/sync';
 import './styles/global.css';
 
 applyTheme(getStoredTheme());
 registerSW({ immediate: true });
 void trashRepo.purgeExpired();
+void initSync();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
