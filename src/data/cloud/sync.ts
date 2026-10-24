@@ -69,17 +69,24 @@ async function currentUser() {
 
 // ---------- 로그인 ----------
 
-/** 이메일로 로그인 코드를 보낸다. 처음이면 계정이 만들어진다. */
-export async function sendLoginCode(email: string) {
+/*
+ * 이메일 + 비밀번호 로그인.
+ * 무료 기본 메일은 내용을 고칠 수 없어서 코드 메일을 못 쓰고, 링크 로그인은 아이폰에 설치한 앱에서 안 되기 때문이다.
+ */
+export async function signIn(email: string, password: string) {
   const client = await getClient();
-  const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  const { error } = await client.auth.signInWithPassword({ email, password });
   if (error) throw new Error(friendlyError(error.message));
 }
 
-export async function verifyLoginCode(email: string, code: string) {
+/** 처음 쓸 때 계정을 만든다. 'needsConfirm'이면 메일의 확인 링크를 누른 뒤 로그인해야 한다. */
+export async function signUp(email: string, password: string): Promise<'signedIn' | 'needsConfirm'> {
   const client = await getClient();
-  const { error } = await client.auth.verifyOtp({ email, token: code.trim(), type: 'email' });
+  const { data, error } = await client.auth.signUp({ email, password });
   if (error) throw new Error(friendlyError(error.message));
+  // 이미 있는 이메일이면 Supabase는 에러 대신 빈 identities를 돌려준다.
+  if (data.user && data.user.identities?.length === 0) throw new Error('이미 가입한 이메일이에요. 로그인해 주세요.');
+  return data.session ? 'signedIn' : 'needsConfirm';
 }
 
 /** 로그아웃해도 이 기기의 기록은 그대로 남는다. 다음에 로그인하면 처음부터 다시 맞춘다. */
@@ -95,10 +102,14 @@ export async function signOut() {
 
 function friendlyError(message: string): string {
   const m = message.toLowerCase();
-  if (m.includes('rate limit') || m.includes('security purposes')) return '코드를 너무 자주 요청했어요. 잠시 뒤에 다시 해 주세요.';
-  if (m.includes('expired') || m.includes('invalid')) return '코드가 맞지 않거나 시간이 지났어요. 새 코드를 받아 주세요.';
+  if (m.includes('rate limit') || m.includes('security purposes')) return '너무 자주 시도했어요. 잠시 뒤에 다시 해 주세요.';
+  if (m.includes('invalid login credentials')) return '이메일이나 비밀번호가 맞지 않아요.';
+  if (m.includes('email not confirmed')) return '아직 이메일 확인이 안 됐어요. 메일의 확인 링크를 눌러 주세요.';
+  if (m.includes('already registered')) return '이미 가입한 이메일이에요. 로그인해 주세요.';
+  if (m.includes('password should be')) return '비밀번호는 6자 이상으로 정해 주세요.';
+  if (m.includes('invalid') && m.includes('email')) return '이메일 주소 형식을 확인해 주세요.';
   if (m.includes('fetch') || m.includes('network')) return '서버에 연결할 수 없어요. 인터넷 연결을 확인해 주세요.';
-  if (m.includes('signups not allowed')) return '새 계정을 만들 수 없게 설정돼 있어요. Supabase 설정을 확인해 주세요.';
+  if (m.includes('signups not allowed') || m.includes('signup is disabled')) return '새 가입이 막혀 있어요. 이미 만든 계정으로 로그인해 주세요.';
   return message;
 }
 

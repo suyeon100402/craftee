@@ -168,3 +168,19 @@
     transform: rotate(360deg);
   }
 }
+
+.cloudLogin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 420px;
+}
+.passwordRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.passwordRow :global(.input) {
+  flex: 1;
+  min-width: 0;
+}

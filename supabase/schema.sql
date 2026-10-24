@@ -47,6 +47,14 @@ language sql security invoker as $$
     where public.records.updated_at < excluded.updated_at;
 $$;
 
+-- 4-1) 권한: 로그인한 사용자만 이 표와 올리기 함수를 쓸 수 있게 한다.
+-- (프로젝트를 만들 때 'Automatically expose new tables'를 꺼 두었어도 동작하도록 직접 열어 준다.)
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on public.records to authenticated;
+revoke all on public.records from anon;
+revoke execute on function public.push_records(jsonb) from public, anon;
+grant execute on function public.push_records(jsonb) to authenticated;
+
 -- 5) 사진 보관함(비공개). 각자 자기 폴더(<사용자 id>/...)에만 접근할 수 있다.
 insert into storage.buckets (id, name, public)
 values ('photos', 'photos', false)

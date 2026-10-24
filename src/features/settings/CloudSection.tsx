@@ -1,6 +1,6 @@
-import { useState, useSyncExternalStore } from 'react';
-import { Cloud, LogOut, RefreshCw } from 'lucide-react';
-import { getSyncStatus, sendLoginCode, signOut, subscribeSync, syncNow, verifyLoginCode } from '../../data/cloud/sync';
+import { useState, useSyncExternalStore, type FormEvent } from 'react';
+import { Cloud, Eye, EyeOff, LogOut, RefreshCw } from 'lucide-react';
+import { getSyncStatus, signIn, signOut, signUp, subscribeSync, syncNow } from '../../data/cloud/sync';
 import { useConfirm } from '../../components/ConfirmDialog';
 import s from './settings.module.css';
 
@@ -32,19 +32,29 @@ export function CloudSection() {
 }
 
 function LoginForm() {
+  // first: 처음 쓰는 기기에서 계정 만들기, login: 이미 만든 계정으로 로그인
+  const [mode, setMode] = useState<'login' | 'first'>('login');
   const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [step, setStep] = useState<'email' | 'code'>('email');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
-  const run = async (fn: () => Promise<void>) => {
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
     setBusy(true);
     setError(null);
+    setNotice(null);
     try {
-      await fn();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : '문제가 생겼어요.');
+      if (mode === 'login') {
+        await signIn(email.trim(), password);
+      } else if ((await signUp(email.trim(), password)) === 'needsConfirm') {
+        setNotice('확인 메일을 보냈어요. 메일의 링크를 누른 다음, 여기서 로그인해 주세요.');
+        setMode('login');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '문제가 생겼어요.');
     } finally {
       setBusy(false);
     }
@@ -53,64 +63,58 @@ function LoginForm() {
   return (
     <>
       <p className={s.sectionDesc}>
-        로그인하면 폰, 패드, PC의 기록과 사진이 자동으로 맞춰져요. 비밀번호 없이 이메일로 받은 코드로 로그인해요.
+        로그인하면 폰, 패드, PC의 기록과 사진이 자동으로 맞춰져요. 모든 기기에서 같은 이메일과 비밀번호로 로그인하세요.
       </p>
-      {step === 'email' ? (
-        <form
-          className={s.cloudForm}
-          onSubmit={(e) => {
-            e.preventDefault();
-            void run(async () => {
-              await sendLoginCode(email.trim());
-              setStep('code');
-            });
-          }}
-        >
+      <div className="chips" role="tablist" aria-label="로그인 방식">
+        <button type="button" role="tab" className="chip" aria-pressed={mode === 'login'} onClick={() => { setMode('login'); setError(null); }}>
+          로그인
+        </button>
+        <button type="button" role="tab" className="chip" aria-pressed={mode === 'first'} onClick={() => { setMode('first'); setError(null); }}>
+          처음이에요 (계정 만들기)
+        </button>
+      </div>
+      <form className={s.cloudLogin} onSubmit={submit}>
+        <input
+          className="input"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="이메일 주소"
+          required
+        />
+        <div className={s.passwordRow}>
           <input
             className="input"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일 주소"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={mode === 'login' ? '비밀번호' : '비밀번호 정하기 (6자 이상)'}
+            minLength={6}
             required
           />
-          <button type="submit" className="btn btn-primary" disabled={busy || !email.trim()}>
-            코드 받기
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setShowPassword((v) => !v)}
+            aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
-        </form>
-      ) : (
-        <form
-          className={s.cloudForm}
-          onSubmit={(e) => {
-            e.preventDefault();
-            void run(() => verifyLoginCode(email.trim(), code));
-          }}
-        >
-          <p className={s.sectionDesc} style={{ width: '100%' }}>
-            <strong>{email}</strong>(으)로 보낸 메일의 숫자 코드를 입력해 주세요. 메일이 안 보이면 스팸함도 확인해 주세요.
-          </p>
-          <input
-            className="input"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-            placeholder="숫자 코드"
-            maxLength={10}
-            required
-            autoFocus
-          />
-          <button type="submit" className="btn btn-primary" disabled={busy || code.length < 6}>
-            로그인
-          </button>
-          <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setStep('email'); setCode(''); setError(null); }}>
-            이메일 다시 입력
-          </button>
-        </form>
+        </div>
+        <button type="submit" className="btn btn-primary" disabled={busy || !email.trim() || password.length < 6}>
+          {mode === 'login' ? '로그인' : '계정 만들고 시작하기'}
+        </button>
+      </form>
+      {mode === 'first' && (
+        <p className={s.sectionDesc}>
+          계정은 한 번만 만들면 돼요. 다른 기기에서는 '로그인'으로 같은 이메일과 비밀번호를 넣으세요.
+        </p>
       )}
       {busy && <p className="muted">잠시만 기다려 주세요…</p>}
+      {notice && <p className={`${s.message} ${s.ok}`}>{notice}</p>}
       {error && <p className={`${s.message} ${s.error}`}>{error}</p>}
     </>
   );
