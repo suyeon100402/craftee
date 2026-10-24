@@ -31,13 +31,17 @@ src/
 2. `src/styles/global.css`에 `@import './themes/새이름.css';`를 추가합니다.
 3. `src/theme/themes.ts`의 `THEMES`에 한 줄 추가하면 설정 화면에 나타납니다.
 
-## 무료로 배포하기 (GitHub Pages)
+## 배포 (GitHub Pages)
 
-1. GitHub에 저장소를 만들고 이 폴더를 push 합니다.
-2. `npm run build`로 `dist/` 폴더를 만듭니다.
-3. `dist/` 내용을 `gh-pages` 브랜치에 올리고, 저장소 Settings → Pages에서 해당 브랜치를 선택합니다.
-   (Cloudflare Pages를 쓰면 빌드 명령 `npm run build`, 출력 폴더 `dist`로 연결만 하면 됩니다.)
-4. 폰에서 주소를 열고 "홈 화면에 추가"를 누르면 앱처럼 쓸 수 있습니다.
+앱 주소: https://suyeon100402.github.io/craftee/
+
+코드를 고친 뒤 아래 명령을 실행하면 빌드해서 `gh-pages` 브랜치에 올리고, 1~2분 뒤 주소에 반영됩니다.
+
+```bash
+npm run deploy
+```
+
+폰에서 주소를 열고 "홈 화면에 추가"를 누르면 앱처럼 쓸 수 있습니다.
 
 ## 다음에 할 것
 
