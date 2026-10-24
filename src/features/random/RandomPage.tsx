@@ -7,15 +7,17 @@ import { useCategories, useMaterialTypes } from '../../data/categories';
 import { PageHeader } from '../../components/PageHeader';
 import { EmptyState } from '../../components/EmptyState';
 import { PhotoImg } from '../../components/PhotoImg';
+import { Wheel } from './Wheel';
 import s from './random.module.css';
 
-type Mode = 'next' | 'today' | 'material' | 'combo';
+type Mode = 'next' | 'today' | 'material' | 'combo' | 'wheel';
 
 const MODES: { value: Mode; label: string; desc: string }[] = [
   { value: 'next', label: '💭 다음에 만들 작품', desc: '만들 예정인 작품 중에서 하나를 골라요.' },
   { value: 'today', label: '🪡 오늘 할 작품', desc: '만들고 있는 작품 중에서 오늘 손댈 걸 골라요.' },
   { value: 'material', label: '🎁 재료 하나', desc: '가지고 있는 재료 중에서 하나를 골라요.' },
   { value: 'combo', label: '🎨 재료 조합', desc: '고른 종류마다 재료를 하나씩 뽑아 조합을 만들어요.' },
+  { value: 'wheel', label: '🎡 돌림판', desc: '직접 적은 항목으로 돌림판을 돌려요. 항목은 이 기기에 저장돼요.' },
 ];
 
 /** 뽑기 결과 카드 하나에 필요한 정보(작품이든 재료든 같은 모양으로 보여준다) */
@@ -148,7 +150,7 @@ export function RandomPage() {
   };
 
   const modeInfo = MODES.find((m) => m.value === mode)!;
-  const emptyText: Record<Mode, { title: string; to: string; action: string }> = {
+  const emptyText: Record<Exclude<Mode, 'wheel'>, { title: string; to: string; action: string }> = {
     next: { title: '만들 예정인 작품이 없어요', to: '/projects/new?status=planned', action: '만들 것 추가' },
     today: { title: '만들고 있는 작품이 없어요', to: '/plans', action: '만들 예정 보기' },
     material: { title: '가지고 있는 재료가 없어요', to: '/materials/new', action: '재료 등록' },
@@ -166,7 +168,7 @@ export function RandomPage() {
             type="button"
             role="tab"
             aria-selected={mode === m.value}
-            className={s.mode}
+            className={`${s.mode} ${m.value === 'wheel' ? s.modeWide : ''}`}
             onClick={() => changeMode(m.value)}
           >
             {m.label}
@@ -175,7 +177,9 @@ export function RandomPage() {
       </div>
       <p className={`muted ${s.modeDesc}`}>{modeInfo.desc}</p>
 
-      {pool.length === 0 ? (
+      {mode === 'wheel' ? (
+        <Wheel />
+      ) : pool.length === 0 ? (
         <EmptyState
           title={emptyText[mode].title}
           action={

@@ -160,3 +160,104 @@
   min-height: 54px;
   font-size: 18px;
 }
+
+/* ---------- 돌림판 ---------- */
+.modeWide {
+  grid-column: 1 / -1;
+}
+@media (min-width: 700px) {
+  .modes {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .modeWide {
+    grid-column: auto;
+  }
+}
+.wheelWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.wheelBox {
+  position: relative;
+  width: min(100%, 340px);
+  margin: 4px auto 0;
+  aspect-ratio: 1;
+}
+.wheelSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 6px 18px rgba(122, 88, 100, 0.18));
+}
+.wheelSpin {
+  transform-origin: 100px 100px;
+  transition-property: transform;
+  /* 빠르게 돌다가 천천히 멈춘다 */
+  transition-timing-function: cubic-bezier(0.15, 0.7, 0.1, 1);
+}
+.wheelHub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 23%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 4px solid var(--surface);
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-family: var(--font-title);
+  font-size: clamp(14px, 4.5vw, 19px);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.15s var(--ease);
+}
+.wheelHub:active:not(:disabled) {
+  transform: translate(-50%, -50%) scale(0.94);
+}
+.wheelHub:disabled {
+  cursor: default;
+}
+.wheelResult {
+  min-height: 40px;
+  text-align: center;
+}
+.wheelResultText {
+  font-family: var(--font-title);
+  font-size: 24px;
+  animation: pop 0.45s var(--ease);
+}
+.wheelEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+.wheelAdd {
+  display: flex;
+  gap: 8px;
+}
+.wheelAdd :global(.input) {
+  flex: 1;
+  min-width: 0;
+}
+.wheelChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 4px 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+}
+.wheelChip button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  opacity: 0.6;
+}
