@@ -1,18 +1,41 @@
-import { useId } from 'react';
+import { useId, type ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { todayStr } from '../lib/date';
 import s from './components.module.css';
 
 interface DateFieldProps {
   label: string;
-  /** null이면 '모름' */
+  /**
+   * 'YYYY', 'YYYY-MM', 'YYYY-MM-DD' 중 하나. 연도만, 연월만 알아도 저장할 수 있다.
+   * null이면 '모름'.
+   */
   value: string | null;
   onChange: (value: string | null) => void;
 }
 
-/** 날짜 입력칸. 오른쪽 위 '모름'을 누르면 날짜 없이 저장할 수 있다. */
+const pad = (n: number) => String(n).padStart(2, '0');
+const daysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate();
+const OLDEST_YEAR = 1970;
+
+/**
+ * 날짜 입력칸. 연 / 월 / 일을 따로 고르고, 월이나 일은 '-'로 비워 둘 수 있다.
+ * 오른쪽 위 '모름'을 누르면 날짜 없이 저장한다.
+ */
 export function DateField({ label, value, onChange }: DateFieldProps) {
   const id = useId();
   const unknown = value === null;
+  const [y, m, d] = (value ?? '').split('-').map(Number);
+
+  const thisYear = new Date().getFullYear();
+  const years: number[] = [];
+  for (let year = thisYear + 1; year >= Math.min(OLDEST_YEAR, y || thisYear); year--) years.push(year);
+
+  // 월을 비우면 일도 비운다. 월을 바꿨을 때 그 달에 없는 날(예: 2월 31일)이면 마지막 날로 맞춘다.
+  const update = (year: number, month: number, day: number) => {
+    if (!month) return onChange(String(year));
+    if (!day) return onChange(`${year}-${pad(month)}`);
+    onChange(`${year}-${pad(month)}-${pad(Math.min(day, daysInMonth(year, month)))}`);
+  };
 
   return (
     <div className="field">
@@ -34,15 +57,53 @@ export function DateField({ label, value, onChange }: DateFieldProps) {
           <span>?</span> 날짜 모름
         </button>
       ) : (
-        <input
-          id={id}
-          type="date"
-          className={`input ${s.dateInput}`}
-          value={value}
-          // 달력에서 '지우기'를 누르면 모름으로 바뀐다.
-          onChange={(e) => onChange(e.target.value || null)}
-        />
+        <div className={s.dateSelects}>
+          <Select id={id} value={y} onChange={(year) => update(year, m, d)} aria-label={`${label} 연도`}>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}년
+              </option>
+            ))}
+          </Select>
+          <Select value={m || 0} onChange={(month) => update(y, month, month ? d : 0)} aria-label={`${label} 월`}>
+            <option value={0}>- 월</option>
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}월
+              </option>
+            ))}
+          </Select>
+          <Select value={d || 0} onChange={(day) => update(y, m, day)} disabled={!m} aria-label={`${label} 일`}>
+            <option value={0}>- 일</option>
+            {m > 0 &&
+              Array.from({ length: daysInMonth(y, m) }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}일
+                </option>
+              ))}
+          </Select>
+        </div>
       )}
     </div>
+  );
+}
+
+interface SelectProps {
+  id?: string;
+  value: number;
+  onChange: (value: number) => void;
+  disabled?: boolean;
+  'aria-label': string;
+  children: ReactNode;
+}
+
+function Select({ onChange, children, ...rest }: SelectProps) {
+  return (
+    <span className={s.selectWrap}>
+      <select className={`input ${s.select}`} onChange={(e) => onChange(Number(e.target.value))} {...rest}>
+        {children}
+      </select>
+      <ChevronDown size={16} aria-hidden="true" />
+    </span>
   );
 }

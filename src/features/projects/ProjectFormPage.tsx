@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { Check, Plus, Search, X } from 'lucide-react';
 import type { Project, ProjectStatus } from '../../data/types';
 import { FALLBACK_CATEGORY_ID, STATUSES } from '../../data/meta';
@@ -39,16 +39,19 @@ export function ProjectFormPage() {
   const { id } = useParams();
   const [params] = useSearchParams();
   const existing = useProject(id);
+  // 수정 화면 → 새 작품 화면처럼 같은 화면끼리 이동해도 입력 내용이 남지 않게, 이동할 때마다 새로 그린다.
+  const location = useLocation();
+  const key = `${location.pathname}${location.search}:${location.key}`;
   const firstCategory = useCategories().list[0]?.id ?? FALLBACK_CATEGORY_ID;
 
   if (id) {
     if (existing === undefined) return null;
     if (existing === null) return <NotFoundPage message="작품을 찾을 수 없어요" />;
-    return <ProjectForm initial={existing} isNew={false} />;
+    return <ProjectForm key={key} initial={existing} isNew={false} />;
   }
   const requested = params.get('status') as ProjectStatus;
   const status = STATUS_VALUES.includes(requested) ? requested : 'done';
-  return <ProjectForm initial={emptyProject(status, firstCategory)} isNew />;
+  return <ProjectForm key={key} initial={emptyProject(status, firstCategory)} isNew />;
 }
 
 function ProjectForm({ initial, isNew }: { initial: Project; isNew: boolean }) {

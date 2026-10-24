@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { Plus, X } from 'lucide-react';
 import type { Material } from '../../data/types';
 import { FALLBACK_CATEGORY_ID } from '../../data/meta';
@@ -32,14 +32,17 @@ function emptyMaterial(type: string): Material {
 export function MaterialFormPage() {
   const { id } = useParams();
   const existing = useMaterial(id);
+  // 수정 화면 → 새 재료 화면처럼 같은 화면끼리 이동해도 입력 내용이 남지 않게, 이동할 때마다 새로 그린다.
+  const location = useLocation();
+  const key = `${location.pathname}${location.search}:${location.key}`;
   const firstType = useMaterialTypes().list[0]?.id ?? FALLBACK_CATEGORY_ID;
 
   if (id) {
     if (existing === undefined) return null;
     if (existing === null) return <NotFoundPage message="재료를 찾을 수 없어요" />;
-    return <MaterialForm initial={existing} isNew={false} />;
+    return <MaterialForm key={key} initial={existing} isNew={false} />;
   }
-  return <MaterialForm initial={emptyMaterial(firstType)} isNew />;
+  return <MaterialForm key={key} initial={emptyMaterial(firstType)} isNew />;
 }
 
 // 기본 재료 종류의 이름 예시(직접 만든 종류는 '이름'으로 보여준다)

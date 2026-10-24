@@ -462,3 +462,33 @@
   background: var(--surface-2);
   font-weight: 700;
 }
+/* 연 / 월 / 일 선택 */
+.dateSelects {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px;
+}
+.selectWrap {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+.selectWrap svg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 30px;
+  cursor: pointer;
+}
+.select:disabled {
+  color: var(--text-muted);
+  opacity: 0.6;
+  cursor: default;
+}

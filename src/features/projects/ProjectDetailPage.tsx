@@ -103,11 +103,11 @@ export function ProjectDetailPage() {
           {project.status !== 'planned' && (
             <dl className={s.infoGrid}>
               <dt>시작한 날</dt>
-              <dd className={project.startedAt ? undefined : 'muted'}>{formatDate(project.startedAt) || '모름'}</dd>
+              <dd className={project.startedAt ? undefined : 'muted'}>{formatDate(project.startedAt) || '-'}</dd>
               {project.status === 'done' && (
                 <>
                   <dt>완성한 날</dt>
-                  <dd className={project.finishedAt ? undefined : 'muted'}>{formatDate(project.finishedAt) || '모름'}</dd>
+                  <dd className={project.finishedAt ? undefined : 'muted'}>{formatDate(project.finishedAt) || '-'}</dd>
                 </>
               )}
             </dl>
