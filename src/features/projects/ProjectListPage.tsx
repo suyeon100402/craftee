@@ -108,7 +108,7 @@ export function ProjectListPage({ mode }: { mode: 'works' | 'plans' }) {
           }
           action={
             <Link to={`/projects/new?status=${newStatus}`} className="btn btn-primary">
-              <Plus size={20} strokeWidth={2.4} /> {isPlans ? '만들 것 추가' : '기록하기'}
+              <Plus size={20} strokeWidth={2.4} /> {isPlans ? '추가' : '기록하기'}
             </Link>
           }
         />

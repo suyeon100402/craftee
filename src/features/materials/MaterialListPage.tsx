@@ -92,7 +92,7 @@ export function MaterialListPage() {
           action={
             !materials.length && (
               <Link to="/materials/new" className="btn btn-primary">
-                <Plus size={20} strokeWidth={2.4} /> 첫 재료 등록하기
+                <Plus size={20} strokeWidth={2.4} /> 등록하기
               </Link>
             )
           }
