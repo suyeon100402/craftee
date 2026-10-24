@@ -6,10 +6,12 @@ import { router } from './app/router';
 import { CategoriesProvider } from './data/categories';
 import { DialogProvider } from './components/ConfirmDialog';
 import { applyTheme, getStoredTheme } from './theme/themes';
+import { trashRepo } from './data/repo';
 import './styles/global.css';
 
 applyTheme(getStoredTheme());
 registerSW({ immediate: true });
+void trashRepo.purgeExpired();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

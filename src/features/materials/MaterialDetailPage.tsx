@@ -26,9 +26,9 @@ export function MaterialDetailPage() {
 
   const remove = async () => {
     const ok = await confirm({
-      title: `'${material.name}'을(를) 보관함에서 지울까요?`,
-      message: '사진도 함께 지워져요.',
-      confirmLabel: '지우기',
+      title: `'${material.name}'을(를) 휴지통으로 옮길까요?`,
+      message: '30일 안에는 설정 → 휴지통에서 되살릴 수 있어요.',
+      confirmLabel: '휴지통으로',
       danger: true,
     });
     if (!ok) return;

@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { materialsRepo, photosRepo, progressLogsRepo, projectsRepo, settingsRepo } from './repo';
+import { materialsRepo, photosRepo, progressLogsRepo, projectsRepo, settingsRepo, trashRepo } from './repo';
 
 // 데이터가 바뀌면 화면이 자동으로 다시 그려지는 훅들.
 // 반환값이 undefined면 아직 불러오는 중, null이면 해당 기록이 없다는 뜻이다.
@@ -30,3 +30,5 @@ export function useAllTags() {
     return [...tags].sort((a, b) => a.localeCompare(b, 'ko'));
   }, []);
 }
+
+export const useTrash = () => useLiveQuery(() => trashRepo.list(), []);

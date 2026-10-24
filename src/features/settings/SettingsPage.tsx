@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, ChevronUp, Download, Pencil, Plus, ShieldCheck, Trash2, Upload } from 'lucide-react';
+import { ChevronDown, ChevronRight, ChevronUp, Download, Pencil, Plus, ShieldCheck, Trash2, Upload } from 'lucide-react';
+import { Link } from 'react-router';
 import { THEMES, applyTheme, getStoredTheme, type ThemeId } from '../../theme/themes';
 import { LAST_BACKUP_KEY, exportBackup, importBackup } from '../../data/backup';
-import { useSetting } from '../../data/hooks';
+import { useSetting, useTrash } from '../../data/hooks';
 import { CATEGORY_REPOS, useCategories, type CategoryKind } from '../../data/categories';
 import { FALLBACK_CATEGORY_ID } from '../../data/meta';
 import { CategoryEditor } from '../../components/CategoryEditor';
@@ -19,6 +20,7 @@ export function SettingsPage() {
         <ThemeSection />
         <CategorySection kind="project" />
         <CategorySection kind="material" />
+        <TrashLink />
         <BackupSection />
         <StorageSection />
         <InstallSection />
@@ -141,6 +143,17 @@ function CategorySection({ kind }: { kind: CategoryKind }) {
         </div>
       )}
     </section>
+  );
+}
+
+function TrashLink() {
+  const count = useTrash()?.length ?? 0;
+  return (
+    <Link to="/trash" className={`card ${s.section} ${s.linkCard}`}>
+      <h2 className="section-title">🗑️ 휴지통</h2>
+      <span className="muted" style={{ fontSize: 14 }}>{count ? `${count}개` : '비어 있음'}</span>
+      <ChevronRight size={20} className="muted" />
+    </Link>
   );
 }
 

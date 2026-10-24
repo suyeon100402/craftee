@@ -41,9 +41,9 @@ export function ProjectDetailPage() {
 
   const remove = async () => {
     const ok = await confirm({
-      title: `'${project.title}'을(를) 지울까요?`,
-      message: '사진과 진행 기록도 함께 지워져요.',
-      confirmLabel: '지우기',
+      title: `'${project.title}'을(를) 휴지통으로 옮길까요?`,
+      message: '진행 기록도 함께 옮겨져요. 30일 안에는 설정 → 휴지통에서 되살릴 수 있어요.',
+      confirmLabel: '휴지통으로',
       danger: true,
     });
     if (!ok) return;

@@ -141,3 +141,13 @@
   width: 36px;
   flex: none;
 }
+
+.linkCard {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-4);
+}
+.linkCard h2 {
+  flex: 1;
+}

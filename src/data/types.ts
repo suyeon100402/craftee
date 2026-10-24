@@ -9,6 +9,8 @@ export interface BaseRecord {
   createdAt: number;
   updatedAt: number;
   deletedAt: number | null;
+  /** 휴지통에서 영구 삭제한 시각. deletedAt만 있고 이게 없으면 휴지통에 있는 상태다. */
+  purgedAt?: number | null;
 }
 
 export interface Project extends BaseRecord {

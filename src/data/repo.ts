@@ -8,7 +8,8 @@ import { newId } from '../lib/id';
  * 화면은 데이터를 이 파일의 함수로만 읽고 쓴다.
  * 지금은 기기 안(IndexedDB)에만 저장한다. 나중에 클라우드 동기화를 붙일 때는
  * 이 저장소를 로컬 사본으로 두고, updatedAt / deletedAt을 기준으로 서버와 맞추는 계층을 여기에 더한다.
- * 그래서 기록은 바로 지우지 않고 deletedAt을 찍어 둔다(사진 파일은 용량 때문에 바로 지운다).
+ * 그래서 기록은 바로 지우지 않고 deletedAt을 찍어 둔다.
+ * 작품·재료는 지우면 휴지통으로 가고(사진도 남겨 둠), 영구 삭제할 때 사진 파일을 지우고 purgedAt을 찍는다.
  */
 
 export interface PhotoChanges {
@@ -51,16 +52,16 @@ export const projectsRepo = {
     await db.projects.update(id, { ...patch, updatedAt: Date.now() });
   },
 
+  /** 휴지통으로 옮긴다. 진행 기록도 같은 시각으로 함께 옮겨서, 복구할 때 같이 돌아오게 한다. */
   async remove(id: string) {
-    await db.transaction('rw', db.projects, db.progressLogs, db.photos, async () => {
-      const project = await db.projects.get(id);
-      if (!project) return;
+    await db.transaction('rw', db.projects, db.progressLogs, async () => {
       const now = Date.now();
-      const logs = await db.progressLogs.where('projectId').equals(id).toArray();
-      const photoIds = [...project.photoIds, ...logs.flatMap((l) => l.photoIds)];
-      await db.photos.bulkDelete(photoIds);
-      await db.progressLogs.bulkPut(logs.map((l) => ({ ...l, photoIds: [], deletedAt: now, updatedAt: now })));
-      await db.projects.put({ ...project, photoIds: [], deletedAt: now, updatedAt: now });
+      await db.progressLogs
+        .where('projectId')
+        .equals(id)
+        .filter((l) => !l.deletedAt)
+        .modify({ deletedAt: now, updatedAt: now });
+      await db.projects.update(id, { deletedAt: now, updatedAt: now });
     });
   },
 };
@@ -110,14 +111,10 @@ export const materialsRepo = {
     });
   },
 
+  /** 휴지통으로 옮긴다. */
   async remove(id: string) {
-    await db.transaction('rw', db.materials, db.photos, async () => {
-      const material = await db.materials.get(id);
-      if (!material) return;
-      const now = Date.now();
-      await db.photos.bulkDelete(material.photoIds);
-      await db.materials.put({ ...material, photoIds: [], deletedAt: now, updatedAt: now });
-    });
+    const now = Date.now();
+    await db.materials.update(id, { deletedAt: now, updatedAt: now });
   },
 };
 
@@ -169,6 +166,74 @@ function makeCategoryRepo(
 export type CategoryRepo = ReturnType<typeof makeCategoryRepo>;
 export const categoriesRepo = makeCategoryRepo(db.categories, 'projects', 'category');
 export const materialTypesRepo = makeCategoryRepo(db.materialTypes, 'materials', 'type');
+
+export const TRASH_KEEP_DAYS = 30;
+
+export type TrashItem = { kind: 'project'; record: Project } | { kind: 'material'; record: Material };
+
+const inTrash = (r: BaseRecord) => !!r.deletedAt && !r.purgedAt;
+
+export const trashRepo = {
+  /** 휴지통에 있는 작품과 재료(최근에 지운 순) */
+  async list(): Promise<TrashItem[]> {
+    const [projects, materials] = await Promise.all([db.projects.toArray(), db.materials.toArray()]);
+    const items: TrashItem[] = [
+      ...projects.filter(inTrash).map((record) => ({ kind: 'project' as const, record })),
+      ...materials.filter(inTrash).map((record) => ({ kind: 'material' as const, record })),
+    ];
+    return items.sort((a, b) => b.record.deletedAt! - a.record.deletedAt!);
+  },
+
+  async restore(item: TrashItem) {
+    const now = Date.now();
+    if (item.kind === 'material') {
+      await db.materials.update(item.record.id, { deletedAt: null, updatedAt: now });
+      return;
+    }
+    const { id, deletedAt } = item.record;
+    await db.transaction('rw', db.projects, db.progressLogs, async () => {
+      // 작품과 함께 휴지통에 들어간 진행 기록만 되살린다(그 전에 따로 지운 기록은 그대로).
+      await db.progressLogs
+        .where('projectId')
+        .equals(id)
+        .filter((l) => l.deletedAt === deletedAt && !l.purgedAt)
+        .modify({ deletedAt: null, updatedAt: now });
+      await db.projects.update(id, { deletedAt: null, updatedAt: now });
+    });
+  },
+
+  /** 영구 삭제: 사진 파일까지 지운다. 기록 자체는 동기화·백업 병합을 위해 '지웠음' 표시로 남긴다. */
+  async purge(item: TrashItem) {
+    const now = Date.now();
+    if (item.kind === 'material') {
+      await db.transaction('rw', db.materials, db.photos, async () => {
+        await db.photos.bulkDelete(item.record.photoIds);
+        await db.materials.update(item.record.id, { photoIds: [], purgedAt: now, updatedAt: now });
+      });
+      return;
+    }
+    await db.transaction('rw', db.projects, db.progressLogs, db.photos, async () => {
+      const logs = (await db.progressLogs.where('projectId').equals(item.record.id).toArray()).filter((l) => !l.purgedAt);
+      await db.photos.bulkDelete([...item.record.photoIds, ...logs.flatMap((l) => l.photoIds)]);
+      await db.progressLogs.bulkPut(
+        logs.map((l) => ({ ...l, photoIds: [], deletedAt: l.deletedAt ?? now, purgedAt: now, updatedAt: now })),
+      );
+      await db.projects.update(item.record.id, { photoIds: [], purgedAt: now, updatedAt: now });
+    });
+  },
+
+  async purgeAll() {
+    for (const item of await this.list()) await this.purge(item);
+  },
+
+  /** 지운 지 TRASH_KEEP_DAYS일이 지난 것은 자동으로 영구 삭제한다(앱을 열 때 실행). */
+  async purgeExpired() {
+    const limit = Date.now() - TRASH_KEEP_DAYS * 86_400_000;
+    for (const item of await this.list()) {
+      if (item.record.deletedAt! < limit) await this.purge(item);
+    }
+  },
+};
 
 export const photosRepo = {
   get(id: string) {

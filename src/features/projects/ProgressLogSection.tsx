@@ -18,7 +18,7 @@ export function ProgressLogSection({ projectId }: { projectId: string }) {
   const confirm = useConfirm();
 
   const remove = async (log: ProgressLog) => {
-    const ok = await confirm({ title: '이 기록을 지울까요?', confirmLabel: '지우기', danger: true });
+    const ok = await confirm({ title: '이 기록을 지울까요?', message: '진행 기록은 휴지통에 남지 않고 바로 지워져요.', confirmLabel: '지우기', danger: true });
     if (ok) await progressLogsRepo.remove(log.id);
   };
 
