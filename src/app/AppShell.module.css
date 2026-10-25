@@ -85,7 +85,12 @@
     font-family: var(--font-title);
     font-size: 26px;
   }
-  .brand img {
+  .brandMark {
+    flex: none;
+    overflow: hidden;
+  }
+  .brand img,
+  .brandMark {
     width: 40px;
     height: 40px;
     border-radius: 12px;
@@ -113,4 +118,8 @@
     flex-direction: column;
     gap: 8px;
   }
+}
+.brandMark svg {
+  width: 92%;
+  height: 92%;
 }

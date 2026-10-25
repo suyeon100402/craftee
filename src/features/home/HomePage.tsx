@@ -6,6 +6,7 @@ import { daysSince } from '../../lib/date';
 import { CategoryBadge } from '../../components/Badges';
 import { EmptyState } from '../../components/EmptyState';
 import { ProjectCard, ProjectCover } from '../projects/ProjectCard';
+import { BrandMark } from '../../theme/mascots';
 import s from './home.module.css';
 
 const BACKUP_REMIND_DAYS = 14;
@@ -45,7 +46,7 @@ export function HomePage() {
   return (
     <>
       <header className={s.hero}>
-        <img src="./logo.svg" alt="" />
+        <BrandMark className={s.heroMark} />
         <div>
           <h1 className={s.heroTitle}>Craftee</h1>
           <p className={s.heroSub}>{greeting()}</p>

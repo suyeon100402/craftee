@@ -4,7 +4,12 @@
   gap: 14px;
   padding: calc(env(safe-area-inset-top) + 20px) 0 8px;
 }
-.hero img {
+.heroMark {
+  flex: none;
+  overflow: hidden;
+}
+.hero img,
+.heroMark {
   width: 52px;
   height: 52px;
   border-radius: 16px;
@@ -187,4 +192,8 @@
   border-radius: 14px;
   background: var(--cat-lavender);
   font-size: 24px;
+}
+.heroMark svg {
+  width: 92%;
+  height: 92%;
 }

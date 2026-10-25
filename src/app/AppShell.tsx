@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet, ScrollRestoration } from 'react-router';
 import { Dices, House, Images, Lightbulb, Package, Plus, Search, Settings } from 'lucide-react';
+import { BrandMark } from '../theme/mascots';
 import s from './AppShell.module.css';
 
 const NAV = [
@@ -15,7 +16,7 @@ export function AppShell() {
     <div className={s.shell}>
       <aside className={s.sidebar}>
         <Link to="/" className={s.brand}>
-          <img src="./logo.svg" alt="" />
+          <BrandMark className={s.brandMark} />
           Craftee
         </Link>
         {NAV.map(({ to, label, icon: Icon, end }) => (

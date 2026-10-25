@@ -15,27 +15,10 @@
   color: var(--text-muted);
 }
 
-.themes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-}
-.theme {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  text-align: left;
-}
-.theme[aria-pressed='true'] {
-  border-color: var(--primary-strong);
-  box-shadow: 0 0 0 3px var(--primary-soft);
-}
 .swatches {
   display: flex;
+  margin-left: auto;
+  padding-right: 6px;
 }
 .swatches span {
   width: 26px;
@@ -44,13 +27,6 @@
   border-radius: 50%;
   border: 2px solid var(--surface);
   box-shadow: 0 0 0 1px var(--border);
-}
-.themeName {
-  font-weight: 700;
-}
-.themeDesc {
-  font-size: 12.5px;
-  color: var(--text-muted);
 }
 
 .actions {

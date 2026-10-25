@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronRight, ChevronUp, Download, Pencil, Plus, ShieldCheck, Trash2, Upload } from 'lucide-react';
 import { Link } from 'react-router';
-import { THEMES, applyTheme, getStoredTheme, type ThemeId } from '../../theme/themes';
+import { useCurrentTheme } from '../../theme/mascots';
 import { LAST_BACKUP_KEY, exportBackup, importBackup } from '../../data/backup';
 import { useSetting, useTrash } from '../../data/hooks';
 import { CATEGORY_REPOS, useCategories, type CategoryKind } from '../../data/categories';
@@ -34,31 +34,22 @@ export function SettingsPage() {
   );
 }
 
+/** 지금 테마를 보여주고, 누르면 테마 고르기 페이지로 간다. */
 function ThemeSection() {
-  const [theme, setTheme] = useState<ThemeId>(getStoredTheme);
-
-  const choose = (id: ThemeId) => {
-    applyTheme(id);
-    setTheme(id);
-  };
-
+  const theme = useCurrentTheme();
   return (
-    <section className={`card ${s.section}`}>
+    <Link to="/settings/themes" className={`card ${s.section} ${s.linkCard}`}>
       <h2 className="section-title">🎨 테마</h2>
-      <div className={s.themes}>
-        {THEMES.map((t) => (
-          <button key={t.id} type="button" className={s.theme} aria-pressed={theme === t.id} onClick={() => choose(t.id)}>
-            <span className={s.swatches}>
-              {t.swatches.map((c) => (
-                <span key={c} style={{ background: c }} />
-              ))}
-            </span>
-            <span className={s.themeName}>{t.name}</span>
-            <span className={s.themeDesc}>{t.description}</span>
-          </button>
+      <span className={s.swatches} aria-hidden="true">
+        {theme.swatches.slice(0, 3).map((c) => (
+          <span key={c} style={{ background: c }} />
         ))}
-      </div>
-    </section>
+      </span>
+      <span className="muted" style={{ fontSize: 14, marginLeft: 8 }}>
+        {theme.name}
+      </span>
+      <ChevronRight size={20} className="muted" />
+    </Link>
   );
 }
 

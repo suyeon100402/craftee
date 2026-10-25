@@ -9,6 +9,7 @@ import { MaterialDetailPage } from '../features/materials/MaterialDetailPage';
 import { MaterialFormPage } from '../features/materials/MaterialFormPage';
 import { SearchPage } from '../features/search/SearchPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
+import { ThemePage } from '../features/settings/ThemePage';
 import { TrashPage } from '../features/trash/TrashPage';
 import { RandomPage } from '../features/random/RandomPage';
 import { NotFoundPage } from './NotFoundPage';
@@ -30,6 +31,7 @@ export const router = createHashRouter([
       { path: 'materials/:id/edit', element: <MaterialFormPage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'settings', element: <SettingsPage /> },
+      { path: 'settings/themes', element: <ThemePage /> },
       { path: 'trash', element: <TrashPage /> },
       { path: 'random', element: <RandomPage /> },
       { path: '*', element: <NotFoundPage /> },

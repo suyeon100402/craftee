@@ -22,8 +22,9 @@ body {
   line-height: 1.55;
   color: var(--text);
   background-color: var(--bg);
-  background-image: radial-gradient(var(--bg-deco) 1.6px, transparent 1.6px);
-  background-size: 22px 22px;
+  /* 테마 CSS에서 --bg-pattern으로 무늬를 바꿀 수 있다(없으면 작은 물방울). */
+  background-image: var(--bg-pattern, radial-gradient(var(--bg-deco) 1.6px, transparent 1.6px));
+  background-size: var(--bg-pattern-size, 22px 22px);
   word-break: keep-all;
   overflow-wrap: anywhere;
 }

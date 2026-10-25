@@ -4,6 +4,9 @@
 
   --bg: #f7f1e6;
   --bg-deco: #efe5d4;
+  /* 배경 무늬(캐릭터 테마는 여기를 캐릭터 무늬로 바꾼다) */
+  --bg-pattern: radial-gradient(var(--bg-deco) 1.6px, transparent 1.6px);
+  --bg-pattern-size: 22px 22px;
   --surface: #fffdf8;
   --surface-2: #faf5ec;
   --text: #4b4237;
