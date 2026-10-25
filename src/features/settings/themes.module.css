@@ -173,3 +173,9 @@
 .comingSoon small {
   font-size: 12.5px;
 }
+
+.preview img.previewMascot {
+  width: 50%;
+  left: 4px;
+  bottom: 0;
+}

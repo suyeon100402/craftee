@@ -259,6 +259,12 @@
   padding: 40px 20px;
   text-align: center;
 }
+/* 캐릭터 테마의 일러스트 */
+.empty > img {
+  width: min(220px, 60vw);
+  height: auto;
+  margin-bottom: 2px;
+}
 /* 털실 그림에만 적용(버튼 안 아이콘까지 커지지 않게) */
 .empty > svg {
   width: 120px;

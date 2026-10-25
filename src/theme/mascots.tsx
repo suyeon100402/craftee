@@ -1,5 +1,6 @@
 import { useSyncExternalStore, type ReactElement } from 'react';
 import { getCurrentTheme, subscribeTheme, themeInfo } from './themes';
+import knitGirl from '../assets/knit/girl.webp';
 
 /*
  * 테마마다 나오는 캐릭터 그림.
@@ -35,8 +36,14 @@ function YarnBuddy({ className }: { className?: string }) {
   );
 }
 
+/** 뜨개 소녀: 사용자가 그린 일러스트를 그대로 쓴다(그림체를 바꾸지 않는다). */
+function KnitGirl({ className }: { className?: string }) {
+  return <img src={knitGirl} alt="" className={className} draggable={false} data-mascot="illustration" />;
+}
+
 export const MASCOTS: Record<string, (props: { className?: string }) => ReactElement> = {
   yarn: YarnBuddy,
+  knitGirl: KnitGirl,
 };
 
 /** 지금 테마의 이름(테마가 바뀌면 다시 그려진다) */
@@ -52,9 +59,20 @@ export function ThemeMascot({ className, themeId }: { className?: string; themeI
   return <Mascot className={className} />;
 }
 
-/** 로고 자리: 캐릭터 테마면 캐릭터, 아니면 앱 로고 */
+/** 로고 자리: 테마에 로고 그림이 있으면 그 그림, 캐릭터만 있으면 캐릭터, 아니면 앱 로고 */
 export function BrandMark({ className }: { className?: string }) {
   const theme = useCurrentTheme();
+  if (theme.logo) {
+    return (
+      <img
+        src={theme.logo}
+        alt=""
+        className={className}
+        draggable={false}
+        style={{ objectFit: 'contain', boxShadow: 'none', borderRadius: 0, background: 'none' }}
+      />
+    );
+  }
   if (theme.mascot && MASCOTS[theme.mascot]) {
     const Mascot = MASCOTS[theme.mascot];
     return (

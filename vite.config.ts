@@ -30,7 +30,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,webp}'],
         runtimeCaching: [
           {
             // 웹폰트는 한 번 받으면 오프라인에서도 쓰도록 캐시한다.

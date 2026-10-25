@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Check } from 'lucide-react';
 import { THEME_GROUPS, THEMES, applyTheme, type ThemeInfo } from '../../theme/themes';
 import { ThemeMascot, useCurrentTheme } from '../../theme/mascots';
@@ -24,7 +25,7 @@ export function ThemePage() {
                 {themes.map((t) => (
                   <ThemeCard key={t.id} theme={t} selected={current.id === t.id} />
                 ))}
-                {group.id === 'character' && (
+                {group.id === 'character' && themes.length === 0 && (
                   <div className={s.comingSoon}>
                     <span>🐣</span>
                     <strong>첫 캐릭터 테마를 같이 만드는 중이에요</strong>
@@ -45,7 +46,15 @@ function ThemeCard({ theme, selected }: { theme: ThemeInfo; selected: boolean })
   return (
     <button type="button" className={s.card} aria-pressed={selected} onClick={() => applyTheme(theme.id)}>
       {/* data-theme을 붙이면 이 안에서만 그 테마의 색 변수가 적용된다 */}
-      <div className={s.preview} data-theme={theme.id}>
+      <div
+        className={s.preview}
+        data-theme={theme.id}
+        style={
+          theme.pattern
+            ? ({ '--bg-pattern': `url("${theme.pattern.image}")`, '--bg-pattern-size': '210px 210px' } as CSSProperties)
+            : undefined
+        }
+      >
         <div className={s.previewBar}>
           <span className={s.previewTitle} />
           <span className={s.previewDot} />

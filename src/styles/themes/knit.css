@@ -1,0 +1,115 @@
+/*
+ * 캐릭터 테마: 뜨개 소녀
+ * 사용자가 그린 일러스트(크레용 느낌의 손그림)에 맞춘 테마. 버터 옐로와 따뜻한 베이지가 중심이다.
+ * 색뿐 아니라 글꼴(손글씨), 테두리(크레용 선), 모서리(삐뚤빼뚤), 그림자(스티커처럼)까지 바꾼다.
+ * 배경 무늬(떠다니는 털실·코바늘·패드)는 이미지라서 themes.ts에서 넣는다.
+ */
+[data-theme='knit'] {
+  color-scheme: light;
+  --theme-color: #fbf3df;
+
+  --bg: #fbf3df;
+  --bg-deco: #f1e2bd;
+  --surface: #fffbf0;
+  --surface-2: #fdf3d8;
+  --text: #4b3a2a;
+  --text-muted: #85705a;
+  --border: #c9ad86;
+
+  --primary: #f9dc7a;
+  --primary-strong: #f4cf5a;
+  --primary-soft: #fdf0c2;
+  --on-primary: #4b3a2a;
+  --focus: #e0a94a;
+
+  --danger: #c4553f;
+  --danger-soft: #fbe3d8;
+
+  /* 스티커처럼 살짝 밀린 그림자 */
+  --shadow-sm: 2px 3px 0 rgba(120, 92, 60, 0.16);
+  --shadow-md: 3px 5px 0 rgba(120, 92, 60, 0.2);
+
+  /* 손으로 그린 듯 조금씩 다른 모서리 */
+  --radius-sm: 11px 9px 12px 8px / 9px 12px 8px 11px;
+  --radius-md: 16px 13px 17px 12px / 13px 17px 12px 16px;
+  --radius-lg: 22px 18px 24px 17px / 18px 24px 17px 22px;
+
+  /* 손글씨 글꼴: 제목과 버튼에 쓰고, 긴 글은 읽기 쉽게 기본 글꼴 그대로 */
+  --font-hand: 'Gaegu', 'Jua', var(--font-body);
+  --font-title: var(--font-hand);
+
+  /* 크레용 선 */
+  --line: #6b5440;
+
+  --cat-pink: #fde3dc;
+  --cat-pink-ink: #a4543f;
+  --cat-peach: #fde3c6;
+  --cat-peach-ink: #9a5a22;
+  --cat-butter: #fbeaa6;
+  --cat-butter-ink: #85620d;
+  --cat-lime: #edf0c4;
+  --cat-lime-ink: #5d6a1c;
+  --cat-mint: #dff0dc;
+  --cat-mint-ink: #3f7550;
+  --cat-sky: #e1edf3;
+  --cat-sky-ink: #3f6b82;
+  --cat-lavender: #ece3f3;
+  --cat-lavender-ink: #6e5590;
+  --cat-gray: #efe8dc;
+  --cat-gray-ink: #6b5f50;
+
+  --status-planned: #e1edf3;
+  --status-planned-ink: #3f6b82;
+  --status-in_progress: #fbeaa6;
+  --status-in_progress-ink: #85620d;
+  --status-done: #dff0dc;
+  --status-done-ink: #3f7550;
+}
+
+/* ---------- 손그림 느낌으로 부품 모양 바꾸기 ---------- */
+
+[data-theme='knit'] h1,
+[data-theme='knit'] h2,
+[data-theme='knit'] h3,
+[data-theme='knit'] .section-title {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+[data-theme='knit'] h1 {
+  font-size: 28px;
+}
+
+[data-theme='knit'] .card {
+  border: 1.6px solid var(--line);
+}
+
+[data-theme='knit'] .btn,
+[data-theme='knit'] .chip,
+[data-theme='knit'] .badge {
+  font-family: var(--font-hand);
+  font-weight: 700;
+}
+[data-theme='knit'] .btn {
+  font-size: 18px;
+  border: 1.6px solid var(--line);
+}
+[data-theme='knit'] .btn-ghost {
+  border-color: transparent;
+}
+[data-theme='knit'] .btn-sm {
+  font-size: 16px;
+}
+[data-theme='knit'] .chip {
+  font-size: 16px;
+  border: 1.5px solid var(--line);
+}
+[data-theme='knit'] .chip[aria-pressed='true'] {
+  border-color: var(--line);
+}
+[data-theme='knit'] .badge {
+  font-size: 14px;
+}
+[data-theme='knit'] .input,
+[data-theme='knit'] .textarea {
+  border: 1.5px solid var(--line);
+}
