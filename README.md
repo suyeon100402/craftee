@@ -3,7 +3,7 @@
 뜨개질, 블록 조립, 인형 만들기 작품과 만들 예정인 것, 가진 재료를 모아두는 개인용 앱(PWA)입니다.
 기록은 기기 안(브라우저 IndexedDB)에 저장되고, 로그인하면 Supabase(무료)로 기기끼리 동기화됩니다.
 
-현재 버전: **v1.0.0** (기본 버전) · 버전별 변경 내용은 [CHANGELOG.md](CHANGELOG.md)
+현재 버전: **v1.1.0** · 버전별 변경 내용은 [CHANGELOG.md](CHANGELOG.md)
 
 ## 실행
 
@@ -32,7 +32,8 @@ supabase/       schema.sql (클라우드 동기화용 데이터베이스 설정)
 
 1. `src/styles/themes/pastel.css`를 복사해서 `[data-theme='새이름']`으로 바꾸고 색 값을 고칩니다.
 2. `src/styles/global.css`에 `@import './themes/새이름.css';`를 추가합니다.
-3. `src/theme/themes.ts`의 `THEMES`에 한 줄 추가하면 설정 화면에 나타납니다.
+3. `src/theme/themes.ts`의 `THEMES`에 한 줄 추가하면 설정 → 테마 페이지에 나타납니다(`group`으로 기본/캐릭터 묶음 선택).
+4. 캐릭터 테마는 그림을 `src/assets/<테마>/`에 두고 `mascot`(빈 화면 그림), `logo`(로고), `pattern`(배경 무늬)을 지정합니다. 예: `src/styles/themes/knit.css`
 
 ## 배포 (GitHub Pages)
 

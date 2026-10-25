@@ -54,7 +54,7 @@ export const THEMES: ThemeInfo[] = [
   },
   {
     id: 'knit',
-    name: '뜨개 소녀',
+    name: 'crocheting girl',
     description: '노란 털실과 코바늘, 크레용 손그림',
     group: 'character',
     swatches: ['#fbf3df', '#f9dc7a', '#8b5a3c', '#fde3dc', '#fffbf0'],
