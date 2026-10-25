@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { Search } from 'lucide-react';
 import type { ProjectStatus } from '../../data/types';
@@ -25,7 +26,9 @@ export function SearchPage() {
   const materials = useMaterials();
   const allTags = useAllTags() ?? [];
 
-  const query = params.get('q') ?? '';
+  // 입력 중인 글자는 화면이 직접 들고 있다. 매 글자마다 주소를 바꾸면 폰에서 한글 조합이 깨지기 때문이다.
+  // 주소에는 입력을 잠시 멈췄을 때만 저장한다(뒤로 가기 했을 때 검색어가 남도록).
+  const [query, setQuery] = useState(() => params.get('q') ?? '');
   const tag = params.get('tag');
   const scope = (params.get('scope') as Scope) ?? 'all';
   const category = params.get('category');
@@ -33,11 +36,24 @@ export function SearchPage() {
   const status = params.get('status') as ProjectStatus | null;
 
   const update = (key: string, value: string | null) => {
-    const next = new URLSearchParams(params);
-    if (value) next.set(key, value);
-    else next.delete(key);
-    setParams(next, { replace: true });
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value) next.set(key, value);
+        else next.delete(key);
+        return next;
+      },
+      { replace: true },
+    );
   };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if ((params.get('q') ?? '') !== query) update('q', query || null);
+    }, 500);
+    return () => window.clearTimeout(timer);
+    // 검색어가 바뀔 때만 다시 잰다.
+  }, [query]);
   const toggle = (key: string, value: string, current: string | null) => update(key, current === value ? null : value);
 
   const q = query.trim().toLowerCase();
@@ -73,7 +89,7 @@ export function SearchPage() {
             className="input"
             type="search"
             value={query}
-            onChange={(e) => update('q', e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="작품 이름, 메모, 재료로 찾기"
             autoFocus={!tag}
           />
